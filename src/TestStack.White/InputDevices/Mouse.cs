@@ -105,14 +105,6 @@ namespace White.Core.InputDevices
             SendInput(InputFactory.Mouse(MouseInput(RightMouseButtonUp)));
         }
 
-        public virtual void RightClick(int upDownTimeout = 0)
-        {
-            SendInput(InputFactory.Mouse(MouseInput(RightMouseButtonDown)));
-            if (upDownTimeout != 0)
-                Thread.Sleep(upDownTimeout);
-            SendInput(InputFactory.Mouse(MouseInput(RightMouseButtonUp)));
-        }
-
         public virtual void Click()
         {
             Point clickLocation = Location;
@@ -122,19 +114,6 @@ namespace White.Core.InputDevices
                 if (timeout > 0) Thread.Sleep(timeout + ExtraMillisecondsBecauseOfBugInWindows);
             }
             MouseLeftButtonUpAndDown();
-            lastClickTime = DateTime.Now;
-            lastClickLocation = Location;
-        }
-
-        public virtual void Click(int upDownTimeout = 0)
-        {
-            Point clickLocation = Location;
-            if (lastClickLocation.Equals(clickLocation))
-            {
-                int timeout = doubleClickTime - DateTime.Now.Subtract(lastClickTime).Milliseconds;
-                if (timeout > 0) Thread.Sleep(timeout + ExtraMillisecondsBecauseOfBugInWindows);
-            }
-            MouseLeftButtonUpAndDown(upDownTimeout);
             lastClickTime = DateTime.Now;
             lastClickLocation = Location;
         }
@@ -203,13 +182,6 @@ namespace White.Core.InputDevices
             ActionPerformed(actionListener);
         }
 
-        public virtual void Click(Point point, ActionListener actionListener, int upDownTimeout = 0)
-        {
-            Location = point;
-            Click(upDownTimeout);
-            ActionPerformed(actionListener);
-        }
-
         private static void ActionPerformed(ActionListener actionListener)
         {
             actionListener.ActionPerformed(new Action(ActionType.WindowMessage));
@@ -245,9 +217,7 @@ namespace White.Core.InputDevices
         public virtual void DragAndDrop(IUIItem draggedItem, Point startPosition, IUIItem dropItem, Point endPosition)
         {
             Location = startPosition;
-            //Alla changed 26/01/12 - for drag and drop
-            LeftDown();
-            //HoldForDrag(); //causes to click and not drag
+            HoldForDrag();
             draggedItem.ActionPerformed(Action.WindowMessage);
             var dragStepFraction = (float) (1.0/CoreAppXmlConfiguration.Instance.DragStepCount);
             logger.Info(CoreAppXmlConfiguration.Instance.DragStepCount + ":" + dragStepFraction);
@@ -274,14 +244,6 @@ namespace White.Core.InputDevices
         public static void MouseLeftButtonUpAndDown()
         {
             LeftDown();
-            LeftUp();
-        }
-
-        public static void MouseLeftButtonUpAndDown(int upDownTimeout = 0)
-        {
-            LeftDown();
-            if (upDownTimeout != 0)
-                Thread.Sleep(upDownTimeout);
             LeftUp();
         }
 
