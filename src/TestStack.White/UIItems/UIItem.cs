@@ -100,9 +100,24 @@ namespace White.Core.UIItems
             }
         }
 
+        /// <summary>
+        /// Get current ClickablePoint property or computes it if null.
+        /// </summary>
         public virtual Point ClickablePoint
         {
-            get { return (Point) Property(AutomationElement.ClickablePointProperty); }
+            get
+            {
+                object clickablePointObj = Property(AutomationElement.ClickablePointProperty);
+                if ((clickablePointObj == null) || (clickablePointObj == AutomationElement.NotSupported))
+                {
+                    Point newclickablePoint = new Point(Bounds.TopLeft.X + Bounds.Width / 2.0, Bounds.TopLeft.Y + Bounds.Height / 2.0);
+                    return newclickablePoint;
+                }
+                else
+                {
+                    return (Point)clickablePointObj;
+                }
+            }
         }
 
         public virtual string AccessKey
@@ -216,6 +231,16 @@ namespace White.Core.UIItems
             PerformIfValid(PerformClick);
         }
 
+        /// <summary>
+        /// Performs mouse click at the center of this item
+        /// </summary>
+        /// <param name="upDownTimeout">time in millisec between mouse Down and Up events</param>
+        public virtual void Click(int upDownTimeout = 0)
+        {
+            actionListener.ActionPerforming(this);
+            PerformClick(upDownTimeout);
+        }
+
         private void PerformIfValid(System.Action action)
         {
             var startTime = DateTime.Now;
@@ -243,6 +268,12 @@ namespace White.Core.UIItems
         {
             if (!Enabled) Logger.WarnFormat("Clicked on disabled item: {0}", ToString());
             mouse.Click(Bounds.Center(), actionListener);
+        }
+
+        internal virtual void PerformClick(int upDownTimeout = 0)
+        {
+            if (!Enabled) Logger.WarnFormat("Clicked on disabled item: {0}", ToString());
+            mouse.Click(Bounds.Center(), actionListener, upDownTimeout);
         }
 
         /// <summary>
