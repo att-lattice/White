@@ -1,21 +1,22 @@
-﻿using System.IO;
-using System.Reflection;
+﻿using White.Core.UIItems;
 
 namespace TestStack.White.UITests.Infrastructure
 {
-    public class WinformsTestConfiguration : TestConfiguration
+    public class WinformsTestConfiguration : WindowsConfiguration
     {
-        protected override string ApplicationExe
+        public WinformsTestConfiguration()
+            : base(WindowsFramework.WinForms)
         {
-            get
-            {
-                return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "WindowsFormsTestApplication.exe");
-            }
         }
 
-        public override string MainWindowTitle
+        protected override string ApplicationExePath()
         {
-            get { return "Form1"; }
+            return "WindowsFormsTestApplication.exe";
+        }
+
+        protected override string MainWindowTitle()
+        {
+            return "Form1";
         }
     }
 }

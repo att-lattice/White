@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Logging;
 using NUnit.Framework;
 using TestStack.White.UITests.Infrastructure;
 using White.Core;
 using White.Core.Configuration;
 using White.Core.InputDevices;
-using White.Core.UIItems.WindowItems;
+using White.Core.UIItems;
 
 namespace TestStack.White.UITests
 {
@@ -15,9 +16,9 @@ namespace TestStack.White.UITests
     {
         readonly ILogger logger = CoreAppXmlConfiguration.Instance.LoggerFactory.Create(typeof(WhiteTestBase));
         internal Keyboard Keyboard;
-        private FrameworkId? currentFramework;
+        private WindowsFramework currentFramework;
 
-        protected Window MainWindow { get; private set; }
+        protected IMainWindow MainWindow { get; private set; }
         protected Application Application { get; private set; }
 
         [Test]
@@ -47,57 +48,51 @@ namespace TestStack.White.UITests
             currentFramework = null;
         }
 
-        protected void RunTest(Action testAction)
+        protected void RunTest(Action testAction, params WindowsFramework[] runFor)
         {
-            try
+            if (!runFor.Any() || runFor.Any(r => r.FrameworkId == currentFramework.FrameworkId))
             {
-                testAction();
-            }
-            catch (Exception ex)
-            {
-                throw new TestFailedException(string.Format("Failed to run {0} for {1}", testAction.Method.Name, currentFramework), ex);
+                try
+                {
+                    testAction();
+                }
+                catch (Exception ex)
+                {
+                    throw new TestFailedException(
+                        string.Format("Failed to run {0} for {1}", testAction.Method.Name, currentFramework), ex);
+                }
             }
         }
 
-        protected void RunTest(Action testAction, FrameworkId runFor)
-        {
-            if ((runFor & currentFramework) != currentFramework) return;
-            try
-            {
-                testAction();
-            }
-            catch (Exception ex)
-            {
-                throw new TestFailedException(string.Format("Failed to run {0} for {1}", testAction.Method.Name, currentFramework), ex);
-            }
-        }
+        protected abstract void RunTest(WindowsFramework framework);
 
-        protected abstract void RunTest(FrameworkId framework);
-
-        private IDisposable SetMainWindow(FrameworkId framework)
+        private IDisposable SetMainWindow(WindowsFramework framework)
         {
             try
             {
                 Keyboard = Keyboard.Instance;
                 var configuration = TestConfigurationFactory.Create(framework);
                 Application = configuration.LaunchApplication();
-                MainWindow = Application.GetWindow(configuration.MainWindowTitle);
+                MainWindow = configuration.GetMainWindow(Application);
 
                 return new ShutdownApplicationDisposable(this);
             }
             catch (Exception e)
             {
                 logger.Error("Failed to launch application and get main window", e);
+                if (Application != null)
+                    Application.Close();
                 throw;
             }
         }
 
-        protected abstract IEnumerable<FrameworkId> SupportedFrameworks();
+        protected abstract IEnumerable<WindowsFramework> SupportedFrameworks();
 
-        protected IEnumerable<FrameworkId> AllFrameworks()
+        protected IEnumerable<WindowsFramework> AllFrameworks()
         {
-            yield return FrameworkId.Wpf;
-            yield return FrameworkId.Winforms;
+            yield return WindowsFramework.Wpf;
+            yield return WindowsFramework.WinForms;
+            yield return WindowsFramework.Silverlight;
         }
 
         private class ShutdownApplicationDisposable : IDisposable
@@ -112,7 +107,17 @@ namespace TestStack.White.UITests
             public void Dispose()
             {
                 testBase.MainWindow.Close();
-                testBase.Application.Close();
+                if (!testBase.Application.HasExited)
+                {
+                    // ReSharper disable EmptyGeneralCatchClause
+                    try
+                    {
+                        testBase.Application.Close();
+                    }
+                    catch (Exception)
+                    {}
+                    // ReSharper restore EmptyGeneralCatchClause
+                }
                 testBase.Application = null;
                 testBase.MainWindow = null;
             }

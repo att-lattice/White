@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Reporting.Configuration;
 using Reporting.Domain;
-using Repository.Configuration;
 using White.Core.Bricks;
+using White.Repository.Configuration;
 
-namespace Repository.Services
+namespace White.Repository.Services
 {
     public class WhiteExecution : IDisposable
     {
@@ -39,7 +39,7 @@ namespace Repository.Services
             service = (T) Activator.CreateInstance(typeof(T), objs);
             if (RepositoryAppXmlConfiguration.Instance.UseHistory || ReportingAppXmlConfiguration.Instance.PublishTestReports)
             {
-                service = (Service) DynamicProxyGenerator.Instance.CreateProxy(new ServiceInterceptor(service, serviceExecution, sessionReport), typeof (T));
+                service = (Service) DynamicProxyGenerator.Instance.CreateProxy(typeof (T), new ServiceInterceptor(service, serviceExecution, sessionReport));
                 services.Add(typeof (T), service);
             }
             return (T) service;

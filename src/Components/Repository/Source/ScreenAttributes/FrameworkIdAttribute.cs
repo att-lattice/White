@@ -1,21 +1,27 @@
 using System;
+using White.Core.UIItems;
 using White.Core.UIItems.Finders;
 
-namespace Repository.ScreenAttributes
+namespace White.Repository.ScreenAttributes
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class FrameworkIdAttribute : SearchCriteriaAttribute
     {
-        private readonly string id;
+        private readonly WindowsFramework framework;
 
         public FrameworkIdAttribute(string id)
         {
-            this.id = id;
+            framework = new WindowsFramework(id);
+        }
+
+        public FrameworkIdAttribute(WindowsFramework framework)
+        {
+            this.framework = framework;
         }
 
         public override void Apply(SearchCriteria searchCriteria)
         {
-            searchCriteria.AndOfFramework(id);
+            searchCriteria.AndOfFramework(framework);
         }
     }
 }

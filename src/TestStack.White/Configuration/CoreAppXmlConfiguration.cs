@@ -18,11 +18,12 @@ namespace White.Core.Configuration
         static CoreAppXmlConfiguration()
         {
             DefaultValues.Add("BusyTimeout", 5000);
+            DefaultValues.Add("FindWindowTimeout", 30000);
             DefaultValues.Add("WaitBasedOnHourGlass", true);
             DefaultValues.Add("WorkSessionLocation", ".");
             DefaultValues.Add("UIAutomationZeroWindowBugTimeout", 5000);
             DefaultValues.Add("PopupTimeout", 5000);
-            DefaultValues.Add("TooltipWaitTime", 0);
+            DefaultValues.Add("TooltipWaitTime", 3000);
             DefaultValues.Add("SuggestionListTimeout", 3000);
             DefaultValues.Add("DefaultDateFormat", DateFormat.CultureDefault.ToString());
             DefaultValues.Add("DragStepCount", 1);
@@ -62,6 +63,12 @@ namespace White.Core.Configuration
         {
             get { return Convert.ToInt32(UsedValues["BusyTimeout"]); }
             set { SetUsedValue("BusyTimeout", value); }
+        }
+
+        public virtual int FindWindowTimeout
+        {
+            get { return Convert.ToInt32(UsedValues["FindWindowTimeout"]); }
+            set { SetUsedValue("FindWindowTimeout", value); }
         }
 
         public virtual bool WaitBasedOnHourGlass

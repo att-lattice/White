@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading;
+using White.Core.Configuration;
 using White.Core.UIItems.WindowItems;
 
 namespace White.Core.Utility
 {
     public static class Retry
     {
-        //TODO Make this read configuration
-        public static TimeSpan WindowWaitDefault = TimeSpan.FromSeconds(30);
-        public static TimeSpan ElementWaitDefault = TimeSpan.FromSeconds(10);
         private static readonly TimeSpan DefaultRetryInterval = TimeSpan.FromMilliseconds(200);
 
         /// <summary>
@@ -17,16 +15,7 @@ namespace White.Core.Utility
         /// <param name="getMethod">The operation to perform.</param>
         public static Window ForDefault(Func<Window> getMethod)
         {
-            return For(getMethod, WindowWaitDefault);
-        }
-
-        /// <summary>
-        /// Retries until method returns a non-default value using default element timeout
-        /// </summary>
-        /// <param name="getMethod">The operation to perform.</param>
-        public static T ForDefault<T>(Func<T> getMethod)
-        {
-            return For(getMethod, ElementWaitDefault);
+            return For(getMethod, CoreAppXmlConfiguration.Instance.FindWindowTimeout());
         }
 
         /// <summary>
@@ -36,7 +25,16 @@ namespace White.Core.Utility
         /// <param name="shouldRetry">The predicate used for retry.</param>
         public static Window ForDefault(Func<Window> getMethod, Predicate<Window> shouldRetry)
         {
-            return For(getMethod, shouldRetry, WindowWaitDefault);
+            return For(getMethod, shouldRetry, CoreAppXmlConfiguration.Instance.FindWindowTimeout());
+        }
+
+        /// <summary>
+        /// Retries until method returns a non-default value using default element timeout
+        /// </summary>
+        /// <param name="getMethod">The operation to perform.</param>
+        public static T ForDefault<T>(Func<T> getMethod)
+        {
+            return For(getMethod, CoreAppXmlConfiguration.Instance.BusyTimeout());
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace White.Core.Utility
         /// <param name="shouldRetry">The predicate used for retry.</param>
         public static T ForDefault<T>(Func<T> getMethod, Predicate<T> shouldRetry)
         {
-            return For(getMethod, shouldRetry, ElementWaitDefault);
+            return For(getMethod, shouldRetry, CoreAppXmlConfiguration.Instance.BusyTimeout());
         }
 
         /// <summary>

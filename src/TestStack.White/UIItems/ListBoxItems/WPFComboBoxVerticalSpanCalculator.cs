@@ -29,12 +29,13 @@ namespace White.Core.UIItems.ListBoxItems
 
                 double comboBoxBottom = combo.Bottom;
 
+                var visibleHeight = VisibleHeight(listTop, listBottom);
                 if (DropUp())
                 {
                     logger.Debug("ComboBox is dropping up");
-                    return new VerticalSpan(listTop, listTop + VisibleHeight(listTop, listBottom));
+                    return new VerticalSpan(listTop, listTop + visibleHeight);
                 }
-                return new VerticalSpan(comboBoxBottom, comboBoxBottom + VisibleHeight(listTop, listBottom));
+                return new VerticalSpan(comboBoxBottom, comboBoxBottom + visibleHeight);
             }
         }
 

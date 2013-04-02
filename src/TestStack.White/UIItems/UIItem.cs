@@ -420,7 +420,7 @@ namespace White.Core.UIItems
 
         internal virtual UIItemContainer AsContainer()
         {
-            return new UIItemContainer(AutomationElement, actionListener);
+            return new UIItemContainer(AutomationElement, ActionListener);
         }
 
         public virtual void RaiseClickEvent()
