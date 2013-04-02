@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace WpfTestApplication
 {
@@ -23,6 +24,21 @@ namespace WpfTestApplication
                         "Test5"
                     };
             }
+        }
+
+        private void LaunchHorizontalGridSplitter(object sender, RoutedEventArgs e)
+        {
+            new HorizontalGridSplitter().ShowDialog();
+        }
+
+        private void LaunchVerticalGridSplitter(object sender, RoutedEventArgs e)
+        {
+            new VerticalGridSplitter().ShowDialog();
+        }
+
+        private void GetMultiple(object sender, RoutedEventArgs e)
+        {
+            new GetMultiple().ShowDialog();
         }
     }
 }

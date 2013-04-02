@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Repository.EntityMapping;
 using White.Core.Bricks;
 using White.Core.SystemExtensions;
 using White.Core.UIItems;
 using White.Core.UIItems.Finders;
 using White.Core.UIItems.WindowItems;
-using Repository.Interceptors;
-using Repository.ScreenAttributes;
+using White.Repository.EntityMapping;
+using White.Repository.Interceptors;
+using White.Repository.ScreenAttributes;
 
-namespace Repository
+namespace White.Repository
 {
     public class ScreenClass
     {
@@ -34,8 +34,8 @@ namespace Repository
                 object injectedObject = null;
                 if (typeof(IUIItem).IsAssignableFrom(fieldInfo.FieldType))
                 {
-                    var interceptor = new UIItemInterceptor(SearchCondition(fieldInfo), window, screenRepository.SessionReport);
-                    injectedObject = DynamicProxyGenerator.Instance.CreateProxy(interceptor, fieldInfo.FieldType);
+                    var interceptor = new UIItemInterceptor(SearchCondition(fieldInfo, window.Framework), window, screenRepository.SessionReport);
+                    injectedObject = DynamicProxyGenerator.Instance.CreateProxy(fieldInfo.FieldType, interceptor);
                 }
                 else if (typeof(AppScreenComponent).IsAssignableFrom(fieldInfo.FieldType))
                 {
@@ -49,17 +49,17 @@ namespace Repository
             return o;
         }
 
-        private static SearchCriteria SearchCondition(FieldInfo fieldInfo)
+        private static SearchCriteria SearchCondition(FieldInfo fieldInfo, WindowsFramework framework)
         {
-            SearchCriteria defaultCriteria = SearchCriteria.ByAutomationId(fieldInfo.Name).AndControlType(fieldInfo.FieldType);
+            SearchCriteria defaultCriteria = SearchCriteria.ByAutomationId(fieldInfo.Name).AndControlType(fieldInfo.FieldType, framework);
             SearchCriteria searchCriteria = null;
             object[] customAttributes = fieldInfo.GetCustomAttributes(false);
             foreach (Attribute customAttribute in customAttributes)
             {
-                SearchCriteriaAttribute searchCriteriaAttribute = customAttribute as SearchCriteriaAttribute;
+                var searchCriteriaAttribute = customAttribute as SearchCriteriaAttribute;
                 if (searchCriteriaAttribute != null)
                 {
-                    if (searchCriteria == null) searchCriteria = SearchCriteria.ByControlType(fieldInfo.FieldType);
+                    if (searchCriteria == null) searchCriteria = SearchCriteria.ByControlType(fieldInfo.FieldType, framework);
                     searchCriteriaAttribute.Apply(searchCriteria);
                 }
             }
