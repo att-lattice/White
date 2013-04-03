@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BCBA4C4-8C47-496C-B0D4-FDE9D066ED27}"
 	ProjectSection(SolutionItems) = preProject
 		..\Build.cmd = ..\Build.cmd
@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{87CF3A
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStack.White", "TestStack.White\TestStack.White.csproj", "{12C59CE2-9CF7-44F4-B27C-90754609F979}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStack.White", "TestStack.White\TestStack.White.csproj", "{7CD2BA6F-5AE1-4893-9F97-8F356372A99A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStack.White.UnitTests", "TestStack.White.UnitTests\TestStack.White.UnitTests.csproj", "{7C7960B2-905D-409A-8068-B010A35BA151}"
 EndProject
@@ -59,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample App", "Sample App", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Winforms", "Winforms", "{DFCF10D7-82C1-4916-A829-B520E8C65321}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinformsTodo", "Sample App\Winforms\WinformsTodo\WinformsTodo.csproj", "{D0ED95E7-584A-45B9-B8E2-1A7ADD78C366}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinformsTodo", "Sample App\WinForms\WinformsTodo\WinformsTodo.csproj", "{D0ED95E7-584A-45B9-B8E2-1A7ADD78C366}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.Core", "Sample App\Todo.Core\Todo.Core.csproj", "{F5604A48-3BD0-4418-83F1-3ECC03DD2FF0}"
 EndProject
@@ -113,10 +113,10 @@ Global
 		{FF4C5653-D6B8-4E17-82B1-E23D52F1C49F}.Debug|x86.Build.0 = Debug|x86
 		{FF4C5653-D6B8-4E17-82B1-E23D52F1C49F}.Release|x86.ActiveCfg = Release|x86
 		{FF4C5653-D6B8-4E17-82B1-E23D52F1C49F}.Release|x86.Build.0 = Release|x86
-		{12C59CE2-9CF7-44F4-B27C-90754609F979}.Debug|x86.ActiveCfg = Debug|x86
-		{12C59CE2-9CF7-44F4-B27C-90754609F979}.Debug|x86.Build.0 = Debug|x86
-		{12C59CE2-9CF7-44F4-B27C-90754609F979}.Release|x86.ActiveCfg = Release|x86
-		{12C59CE2-9CF7-44F4-B27C-90754609F979}.Release|x86.Build.0 = Release|x86
+		{7CD2BA6F-5AE1-4893-9F97-8F356372A99A}.Debug|x86.ActiveCfg = Debug|x86
+		{7CD2BA6F-5AE1-4893-9F97-8F356372A99A}.Debug|x86.Build.0 = Debug|x86
+		{7CD2BA6F-5AE1-4893-9F97-8F356372A99A}.Release|x86.ActiveCfg = Release|x86
+		{7CD2BA6F-5AE1-4893-9F97-8F356372A99A}.Release|x86.Build.0 = Release|x86
 		{7C7960B2-905D-409A-8068-B010A35BA151}.Debug|x86.ActiveCfg = Debug|x86
 		{7C7960B2-905D-409A-8068-B010A35BA151}.Debug|x86.Build.0 = Debug|x86
 		{7C7960B2-905D-409A-8068-B010A35BA151}.Release|x86.ActiveCfg = Release|x86
