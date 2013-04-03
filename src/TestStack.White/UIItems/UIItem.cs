@@ -110,8 +110,10 @@ namespace White.Core.UIItems
                 object clickablePointObj = Property(AutomationElement.ClickablePointProperty);
                 if ((clickablePointObj == null) || (clickablePointObj == AutomationElement.NotSupported))
                 {
-                    Point newclickablePoint = new Point(Bounds.TopLeft.X + Bounds.Width / 2.0, Bounds.TopLeft.Y + Bounds.Height / 2.0);
-                    return newclickablePoint;
+                    //Point newclickablePoint = new Point(Bounds.TopLeft.X + Bounds.Width / 2.0, Bounds.TopLeft.Y + Bounds.Height / 2.0);
+                    //return newclickablePoint;
+                    //Or instead use new extension
+                    return Bounds.Center();
                 }
                 else
                 {
