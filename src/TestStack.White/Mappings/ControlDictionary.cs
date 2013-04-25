@@ -13,6 +13,7 @@ using White.Core.UIItems.TableItems;
 using White.Core.UIItems.TreeItems;
 using White.Core.UIItems.WindowItems;
 using White.Core.UIItems.WindowStripControls;
+using White.Core.SystemExtensions;
 
 namespace White.Core.Mappings
 {
@@ -159,8 +160,8 @@ namespace White.Core.Mappings
                     controlDictionaryItem =>
                     (controlDictionaryItem.IsPrimary && controlDictionaryItem.ControlType.Equals(controlType) &&
                      !controlDictionaryItem.IsIdentifiedByClassName && !controlDictionaryItem.IsIdentifiedByName) ||
-                    (!string.IsNullOrWhiteSpace(className) && className.Contains(controlDictionaryItem.ClassName) && controlDictionaryItem.IsIdentifiedByClassName) ||
-                    (!string.IsNullOrWhiteSpace(name) && name.Equals("PropertyGrid") && controlDictionaryItem.IsIdentifiedByName));
+                    (!className.IsNullOrWhiteSpace() && className.Contains(controlDictionaryItem.ClassName) && controlDictionaryItem.IsIdentifiedByClassName) ||
+                    (!name.IsNullOrWhiteSpace() && name.Equals("PropertyGrid") && controlDictionaryItem.IsIdentifiedByName));
         }
 
         public virtual bool IsExcluded(ControlType controlType)
