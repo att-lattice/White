@@ -76,6 +76,14 @@ namespace White.Core.Factory
             return new SplashWindow(element, InitializeOption.NoCache);
         }
 
+        public virtual Window SplashWindowByName(Process process, string name)
+        {
+            var automationSearchCondition = AutomationSearchCondition.ByControlType(ControlType.Pane).OfName(name).WithProcessId(process.Id);
+            var message = "No control found matching the condition " + AutomationSearchCondition.ToString(new[] { automationSearchCondition }) + Constants.BusyMessage;
+            var element = WaitTillFound(() => Finder.Descendant(automationSearchCondition), message);
+            return new SplashWindow(element, InitializeOption.NoCache);
+        }
+
         public virtual Window CreateWindow(string title, Process process, InitializeOption option, WindowSession windowSession)
         {
             return Create(FindWindowElement(process, title), option, windowSession);
