@@ -255,6 +255,11 @@ namespace White.Core
             return windowFactory.SplashWindow(process);
         }
 
+        public virtual Window FindSplashByName(string name)
+        {
+            return windowFactory.SplashWindowByName(process, name);
+        }
+
         /// <summary>
         /// Waits till application is busy.
         /// </summary>
