@@ -90,7 +90,7 @@ namespace White.Core.WindowsAPI
 
         public enum SpecialKeys
         {
-            //http://pinvoke.net/default.aspx/user32/SendInput.html, http://delphi.about.com/od/objectpascalide/l/blvkc.htm
+            //http://delphi.about.com/od/objectpascalide/l/blvkc.htm
             
             LBUTTON = 0x01, //Left mouse button
             RBUTTON = 0x02, //Right mouse button
@@ -103,8 +103,6 @@ namespace White.Core.WindowsAPI
             SHIFT = 0x10,
             CONTROL = 0x11,
             ALT = 0x12,
-            LEFT_ALT = 0xA4,
-            RIGHT_ALT = 0xA5,
             ESCAPE = 0x1B,
             SPACE = 0x20, //SPACEBAR
             PAGEUP = 0x21,//PAGE UP key (PRIOR)
@@ -124,6 +122,17 @@ namespace White.Core.WindowsAPI
             HELP = 0x2F,
             CAPS = 0x14,
             
+            KEY0 = 0x30, // 0 key 
+            KEY1 = 0x31, // 1 key 
+            KEY2 = 0x32, // 2 key 
+            KEY3 = 0x33, // 3 key 
+            KEY4 = 0x34, // 4 key 
+            KEY5 = 0x35, // 5 key 
+            KEY6 = 0x36, // 6 key 
+            KEY7 = 0x37, //7 key 
+            KEY8 = 0x38, //8 key 
+            KEY9 = 0x39, //9 key 
+
             A = 0x41,
             B = 0x42,
             C = 0x43,
@@ -154,6 +163,22 @@ namespace White.Core.WindowsAPI
             LWIN = 0x5B,
             RWIN = 0x5C,
             APPS = 0x5D,
+            
+            NUM0 = 0x60, //Numeric keypad 0 key
+            NUM1 = 0x61,
+            NUM2 = 0x62,
+            NUM3 = 0x63,
+            NUM4 = 0x64,
+            NUM5 = 0x65,
+            NUM6 = 0x66,
+            NUM7 = 0x67,
+            NUM8 = 0x68,
+            NUM9 = 0x69,
+            
+            SEPARATOR = 0x6C,//Separator key
+            SUBTRACT = 0x6D, //Subtract key
+            DECIMAL = 0x6E, //Decimal key
+            DIVIDE = 0x6F, //Divide key
 
             F1 = 0x70,
             F2 = 0x71,
@@ -186,7 +211,8 @@ namespace White.Core.WindowsAPI
             RSHIFT = 0xA1, //Right SHIFT key
             LCONTROL = 0xA2, //Left CONTROL key
             RCONTROL = 0xA3, //Right CONTROL key
-            LMENU = 0xA4, //Left MENU key
+            LALT = 0xA4,
+            RALT = 0xA5,            
             PLAY = 0xFA, //Play key
             ZOOM = 0xFB //Zoom key
 
