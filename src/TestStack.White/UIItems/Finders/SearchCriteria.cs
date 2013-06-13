@@ -229,8 +229,9 @@ namespace White.Core.UIItems.Finders
 
         public override int GetHashCode()
         {
-            int hashCode = conditions.Sum(condition => condition.GetHashCode());
-            return indexCondition.GetHashCode() + hashCode;
+            //Cast to long anf perform modulo int.MaxValue, because Arithmetic operation resulted in an overflow at System.Linq.Enumerable.Sum
+            long hashCode = conditions.Sum(condition => (long)condition.GetHashCode());
+            return (int)((indexCondition.GetHashCode() + hashCode) % int.MaxValue);
         }
 
         public virtual bool AppliesTo(AutomationElement automationElement)
