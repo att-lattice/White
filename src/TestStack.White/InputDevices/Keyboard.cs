@@ -39,11 +39,14 @@ namespace White.Core.InputDevices
 
         [DllImport("user32.dll")]
         private static extern short VkKeyScan(char ch);
+        
+        [DllImport("user32.dll")]
+        private static extern short VkKeyScanEx(char ch, IntPtr hkl);
 
         [DllImport("user32.dll")]
         private static extern ushort GetKeyState(uint virtKey);
 
-        //http://msdn.microsoft.com/en-us/library/windows/desktop/ms646305(v=vs.85).aspx
+        //http://msdn.microsoft.com/en-us/library/windows/desktop/ff468859(v=vs.85).aspx
         //http://msdn.microsoft.com/en-us/goglobal/bb896001.aspx
         [DllImport("user32.dll")]
         private static extern IntPtr LoadKeyboardLayout(string pwszKLID, uint uFlags);
@@ -55,7 +58,7 @@ namespace White.Core.InputDevices
         private static extern int GetKeyboardLayoutList(int size, [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr[] hkls);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        private static extern IntPtr ActivateKeyboardLayout(int hkl, uint uFlags);
+        private static extern IntPtr ActivateKeyboardLayout(IntPtr hkl, uint uFlags);
 
         private readonly List<KeyboardInput.SpecialKeys> heldKeys = new List<KeyboardInput.SpecialKeys>();
 
@@ -71,67 +74,7 @@ namespace White.Core.InputDevices
         {
         }
 
-        /// <summary>
-        /// Retrieves the active input locale identifier (formerly called the keyboard layout) for the specified thread. 
-        /// If the idThread parameter is zero, the input locale identifier for the active thread is returned.
-        /// </summary>
-        /// <param name="idThread">The identifier of the thread to query, or 0 for the current thread.</param>
-        /// <returns>The return value is the input locale identifier for the thread. 
-        /// The low word contains a Language Identifier for the input language 
-        /// and the high word contains a device handle to the physical layout of the keyboard.</returns>
-        public virtual int GetActiveInputIdentifier(uint idThread)
-        {
-            IntPtr identifier = GetKeyboardLayout(idThread);
-            return identifier.ToInt32();
-        }
-
-        // 
-        /// <summary>
-        /// Loads a new input locale identifier (formerly called the keyboard layout) into the system.
-        /// This function only affects the layout for the current process or thread.
-        /// </summary>
-        /// <param name="identifierName">The name of the input locale identifier to load.</param>
-        /// <param name="flags">Set flags to 1 when trying to change language. 
-        /// Set flags to 0 when trying to reverse the change</param>
-        /// <returns>The return value is the input locale identifier for the thread. 
-        /// If no matching locale is available, the return value is NULL.</returns>
-        public virtual int LoadInputLocaleIdentifier(string identifierName, uint flags)
-        {
-            IntPtr identifier = LoadKeyboardLayout(identifierName, flags);
-            return identifier.ToInt32();
-        }
-
-        /// <summary>
-        /// Sets the input locale identifier (formerly called the keyboard layout handle) for the calling thread or the current process. 
-        /// The input locale identifier specifies a locale as well as the physical layout of the keyboard.
-        /// The input locale identifier must have been loaded by a previous call to the LoadKeyboardLayout function. 
-        /// This parameter must be either the handle to a keyboard layout or one of the following values.
-        /// 1 - Selects the next locale identifier in the circular list of loaded locale identifiers maintained by the system.
-        /// 0 - Selects the previous locale identifier in the circular list of loaded locale identifiers maintained by the system.
-        /// </summary>
-        /// <param name="identifierName">Input locale identifier to be activated.</param>
-        /// <param name="flags"></param>
-        /// <returns></returns>
-        public virtual int SetInputLocaleIdentifier(int identifier, uint flags)
-        {
-            //IntPtr iptr = Marshal.StringToHGlobalUni(identifierName);
-            //IntPtr identifier = ActivateKeyboardLayout(iptr, flags);
-            IntPtr previousIdentifier = ActivateKeyboardLayout(identifier, flags);
-            return previousIdentifier.ToInt32();
-        }
-
-        public virtual int GetInputLocaleIdentifiers(ref int [] identifiers)
-        {
-            IntPtr[] hkls = new IntPtr[identifiers.Length];
-            
-            int count = GetKeyboardLayoutList(identifiers.Length, hkls);
-            for (int i = 0; i < count; i++)
-            {
-                identifiers[i] = hkls[i].ToInt32();
-            }
-            return count;
-        }
-
+        
         public virtual void Enter(string keysToType)
         {
             Send(keysToType, new NullActionListener());
