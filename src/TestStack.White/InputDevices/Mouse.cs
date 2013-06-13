@@ -308,5 +308,13 @@ namespace White.Core.InputDevices
             Location = new Point(currentXLocation, currentYLocation + distance);
             LeftUp();
         }
+
+        public virtual void DragAndDrop(Point startPosition, Point endPosition)
+        {
+            Location = startPosition;
+            LeftDown();
+            Location = endPosition;
+            LeftUp();
+        }
     }
 }
