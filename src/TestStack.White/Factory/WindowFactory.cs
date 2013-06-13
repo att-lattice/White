@@ -105,7 +105,7 @@ namespace White.Core.Factory
 
         private AutomationElement FindWindowElement(Process process, string title)
         {
-            return WaitTillFound(() => Finder.FindWindow(title, process.Id), string.Format("Couldn't find window with title {0} in process {1}{2}", title, process.Id, ", after waiting for 30 seconds"));
+            return WaitTillFound(() => Finder.FindWindow(title, process.Id), string.Format("Couldn't find window with title {0} in process {1}, after waiting for {2} seconds", title, process.Id, CoreAppXmlConfiguration.Instance.FindWindowTimeout().TotalSeconds));
         }
 
         private AutomationElement FindWindowElement(Process process, Predicate<string> match)
