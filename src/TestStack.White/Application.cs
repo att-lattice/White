@@ -35,6 +35,18 @@ namespace White.Core
         }
 
         /// <summary>
+        /// Initializes a new instance of the ProcessStartInfo class, specifies an application file name with which to start the process, and specifies a set of command-line arguments to pass to the application.
+        /// </summary>
+        /// <param name="executable">location of the executable</param>
+        /// <arguments>Command-line arguments to pass to the application when the process starts.</arguments>
+        /// <returns></returns>
+        public static Application LaunchWithArguments(string executable, string arguments)
+        {
+            var processStartInfo = new ProcessStartInfo(executable, arguments);
+            return Launch(processStartInfo);
+        }
+
+        /// <summary>
         /// Runs the process identified by the executable and creates Application object for this executable
         /// </summary>
         /// <param name="executable">location of the executable</param>
@@ -97,11 +109,48 @@ namespace White.Core
         /// </summary>
         /// <param name="executable"></param>
         /// <returns></returns>
-        public static Application Attach(string executable)
+        public static Application Attach(string executable, SortStartTimeOrder sortOrder, int index)
         {
             Process[] processes = Process.GetProcessesByName(executable);
             if (processes.Length == 0) throw new WhiteException("Could not find process named: " + executable);
-            return Attach(processes[0]);
+
+            //Alla debug code
+            foreach (Process p in processes)
+            {
+                Console.Out.WriteLine("Process " + executable + " #" + p.Id);
+                Console.Out.WriteLine("Process start time: " + p.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            }
+            //end
+            
+            switch (sortOrder)
+            {
+                case SortStartTimeOrder.Ascendant:
+                    //Come to solve bug then more than one process exists of the same executable name (e.g. iexplore).
+                    //Before fix the process on the first place in array was returned. 
+                    //Now it will sort processes by their start time and return the most earliest created. 
+                    Array.Sort(processes, delegate(Process p1, Process p2)
+                    {
+                        return p1.StartTime.Ticks.CompareTo(p2.StartTime.Ticks);
+                    });
+                    break;
+
+                case SortStartTimeOrder.Descendant:
+                    //Come to solve bug then more than one process exists of the same executable name (e.g. iexplore).
+                    //Before fix the process on the first place in array was returned. 
+                    //Now it will sort processes by their start time and return the most latest created. 
+                    Array.Sort(processes, delegate(Process p1, Process p2)
+                    {
+                        return p2.StartTime.Ticks.CompareTo(p1.StartTime.Ticks);
+                    });
+                    break;
+            }                      
+            return Attach(processes[index]); 
+        }
+
+        public enum SortStartTimeOrder
+        {
+            Ascendant,
+            Descendant
         }
 
         /// <summary>
@@ -161,6 +210,16 @@ namespace White.Core
         public virtual Window GetWindow(string title)
         {
             return GetWindow(title, InitializeOption.NoCache);
+        }
+
+        /// <summary>
+        /// Get visible window
+        /// </summary>
+        /// <param name="title">Title text of window displayed on desktop</param>
+        /// <returns></returns>
+        public virtual Window GetWindowWithIdentificatio(string title)
+        {
+            return GetWindow(title, InitializeOption.NoCache.AndIdentifiedBy(title));
         }
 
         /// <summary>
