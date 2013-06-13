@@ -91,7 +91,7 @@ namespace White.Core.WindowsAPI
         public enum SpecialKeys
         {
             //http://delphi.about.com/od/objectpascalide/l/blvkc.htm
-            
+            //http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
             LBUTTON = 0x01, //Left mouse button
             RBUTTON = 0x02, //Right mouse button
             CANCEL = 0x03, //Control-break processing
